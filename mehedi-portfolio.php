@@ -114,8 +114,19 @@ function mehedi_all_sections() {
 
 // Enqueue styles and scripts
 function mehedi_enqueue_assets() {
-    wp_enqueue_style('mehedi-portfolio-css', plugin_dir_url(__FILE__) . 'assets/css/mehedi-portfolio.css');
-    wp_enqueue_script('mehedi-portfolio-js', plugin_dir_url(__FILE__) . 'assets/js/mehedi-portfolio.js', array('jquery'), null, true);
+    wp_enqueue_style(
+        'mehedi-portfolio-css',
+        plugin_dir_url(__FILE__) . 'assets/css/mehedi-portfolio.css',
+        array(),
+        filemtime(plugin_dir_path(__FILE__) . 'assets/css/mehedi-portfolio.css')
+    );
+    wp_enqueue_script(
+        'mehedi-portfolio-js',
+        plugin_dir_url(__FILE__) . 'assets/js/mehedi-portfolio.js',
+        array('jquery'),
+        filemtime(plugin_dir_path(__FILE__) . 'assets/js/mehedi-portfolio.js'),
+        true
+    );
 }
 
 add_action('wp_enqueue_scripts', 'mehedi_enqueue_assets');

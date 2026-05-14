@@ -1,6 +1,15 @@
+<style>
+  @media (max-width: 768px) {
+    #vision .vision-grid-inline {
+      grid-template-columns: 1fr !important;
+      gap: 24px !important;
+      align-items: stretch !important;
+    }
+  }
+</style>
 <section id="vision" class="section" style="background:#fff">
 <div class="container">
-<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:60px;align-items:center">
+<div class="grid vision-grid-inline"  style="grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:60px;align-items:center">
 <div class="fade-in">
 <span style="color:var(--primary);font-weight:700;letter-spacing:1px">ইশতেহার</span>
 <h2 style="font-size:2.8rem;margin-bottom:30px;margin-top:10px">লক্ষ্য ও উদ্দেশ্য</h2>
