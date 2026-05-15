@@ -22,7 +22,7 @@ img{max-width:100%;display:block}
 .btn-outline:hover{background-color:var(--primary);color:var(--white)}
 
 /* Hero */
-.hero{min-height:90vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(circle at top right,rgba(0,106,78,0.05),transparent);position:relative}
+.hero{min-height:60vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(circle at top right,rgba(0,106,78,0.05),transparent);position:relative}
 .hero-content{flex:1.2;z-index:1}
 .hero-badge{background:var(--secondary);color:#fff;padding:6px 16px;border-radius:50px;font-weight:600;font-size:0.85rem;display:inline-block;margin-bottom:20px}
 .hero-title{font-size:clamp(2.5rem,5vw,4rem);line-height:1.1;margin-bottom:20px;color:#1a1a1a}
