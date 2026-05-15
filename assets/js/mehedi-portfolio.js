@@ -145,8 +145,33 @@
     if (slides.length > 1) start();
   }
 
+  var videoGrid = document.getElementById('videoGrid');
+  var loadMoreBtn = document.getElementById('videoLoadMoreBtn');
+  if (videoGrid) {
+    var videoCards = Array.prototype.slice.call(videoGrid.querySelectorAll('.video-card'));
+    var batchSize = parseInt(videoGrid.getAttribute('data-batch-size') || '5', 3);
+    var visibleCount = 0;
+
+    function renderVideoBatch() {
+      visibleCount = Math.min(visibleCount + batchSize, videoCards.length);
+      videoCards.forEach(function (card, i) {
+        card.style.display = i < visibleCount ? '' : 'none';
+      });
+      if (loadMoreBtn) {
+        loadMoreBtn.style.display = visibleCount >= videoCards.length ? 'none' : '';
+      }
+    }
+
+    renderVideoBatch();
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', renderVideoBatch);
+    }
+  }
+
   var overlay = document.getElementById('videoOverlay');
   var iframe = document.getElementById('videoIframe');
+  var iframeWrap = document.querySelector('.video-frame-wrap');
+  var noLinkMessage = document.getElementById('videoNoLinkMessage');
   var modalTitle = document.getElementById('videoModalTitle');
   var modalClose = document.getElementById('videoModalClose');
 
@@ -160,10 +185,12 @@
       '<button id="videoModalClose" class="video-modal-close" type="button" aria-label="Close video">&times;</button>' +
       '</div><div class="video-frame-wrap">' +
       '<iframe id="videoIframe" src="" title="Portfolio Video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' +
-      '</div></div></div>';
+      '</div><div id="videoNoLinkMessage" style="display:none;padding:24px;color:#d1d5db;text-align:center;font-size:1rem">No link in this video.</div></div></div>';
     document.body.appendChild(wrapper.firstElementChild);
     overlay = document.getElementById('videoOverlay');
     iframe = document.getElementById('videoIframe');
+    iframeWrap = document.querySelector('.video-frame-wrap');
+    noLinkMessage = document.getElementById('videoNoLinkMessage');
     modalTitle = document.getElementById('videoModalTitle');
     modalClose = document.getElementById('videoModalClose');
   }
@@ -194,7 +221,15 @@
       if (!overlay || !iframe || !modalTitle) return;
       var url = normalizeVideoUrl(card.getAttribute('data-embed') || '');
       var title = card.getAttribute('data-title') || 'Video';
-      iframe.src = url;
+      if (!url) {
+        iframe.src = '';
+        if (iframeWrap) iframeWrap.style.display = 'none';
+        if (noLinkMessage) noLinkMessage.style.display = 'block';
+      } else {
+        if (iframeWrap) iframeWrap.style.display = '';
+        if (noLinkMessage) noLinkMessage.style.display = 'none';
+        iframe.src = url;
+      }
       modalTitle.textContent = title;
       overlay.style.display = 'flex';
       overlay.setAttribute('aria-hidden', 'false');
@@ -205,6 +240,8 @@
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) {
         iframe.src = '';
+        if (iframeWrap) iframeWrap.style.display = '';
+        if (noLinkMessage) noLinkMessage.style.display = 'none';
         overlay.style.display = 'none';
         overlay.setAttribute('aria-hidden', 'true');
       }
@@ -212,6 +249,8 @@
     if (modalClose) {
       modalClose.addEventListener('click', function () {
         iframe.src = '';
+        if (iframeWrap) iframeWrap.style.display = '';
+        if (noLinkMessage) noLinkMessage.style.display = 'none';
         overlay.style.display = 'none';
         overlay.setAttribute('aria-hidden', 'true');
       });
@@ -219,6 +258,8 @@
     window.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.style.display === 'flex') {
         iframe.src = '';
+        if (iframeWrap) iframeWrap.style.display = '';
+        if (noLinkMessage) noLinkMessage.style.display = 'none';
         overlay.style.display = 'none';
         overlay.setAttribute('aria-hidden', 'true');
       }
