@@ -12,7 +12,7 @@
         </div>
         <div class="hero-image">
             <div class="image-container fade-in">
-             <img src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/hero-image.jpeg'; ?>" alt="মেহেদী হাসান সাগর">
+             <img src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/hero2.jpg'; ?>" alt="মেহেদী হাসান সাগর">
                 <div class="floating-badge badge-top-right">
                     <div style="font-weight:800;font-size:0.9rem;color:var(--primary);text-align:center;line-height:1.2">ভোট দিন<br><span style="color:var(--secondary)">ধানের শীষে</span></div>
                 </div>
