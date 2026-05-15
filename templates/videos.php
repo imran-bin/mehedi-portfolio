@@ -1,5 +1,7 @@
 <?php
 $video_items = array();
+$initial_show = 10;
+$load_more_count = 10;
 
 if ( function_exists( 'get_field' ) ) {
     $videos_group = get_field( 'videos' );
@@ -18,7 +20,11 @@ if ( function_exists( 'get_field' ) ) {
         </div>
 
         <?php if ( ! empty( $video_items ) ) : ?>
-            <div class="video-grid" id="videoGrid" data-batch-size="10">
+            <div
+                class="video-grid"
+                id="videoGrid"
+                data-initial-show="<?php echo esc_attr( $initial_show ); ?>"
+                data-batch-size="<?php echo esc_attr( $load_more_count ); ?>">
                 <?php foreach ( $video_items as $item ) :
                     $caption   = isset( $item['caption'] ) ? (string) $item['caption'] : '';
                     $link      = isset( $item['link'] ) ? (string) $item['link'] : '';

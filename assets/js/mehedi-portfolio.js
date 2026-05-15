@@ -149,8 +149,11 @@
   var loadMoreBtn = document.getElementById('videoLoadMoreBtn');
   if (videoGrid) {
     var videoCards = Array.prototype.slice.call(videoGrid.querySelectorAll('.video-card'));
-    var batchSize = parseInt(videoGrid.getAttribute('data-batch-size') || '5', 3);
-    var visibleCount = 0;
+    var initialShow = parseInt(videoGrid.getAttribute('data-initial-show'), 3);
+    var batchSize = parseInt(videoGrid.getAttribute('data-batch-size'), 2);
+    if (!Number.isFinite(initialShow) || initialShow < 1) initialShow = 3;
+    if (!Number.isFinite(batchSize) || batchSize < 1) batchSize = 2;
+    var visibleCount = Math.min(initialShow, videoCards.length);
 
     function renderVideoBatch() {
       visibleCount = Math.min(visibleCount + batchSize, videoCards.length);
@@ -162,8 +165,11 @@
       }
     }
 
-    renderVideoBatch();
+    videoCards.forEach(function (card, i) {
+      card.style.display = i < visibleCount ? '' : 'none';
+    });
     if (loadMoreBtn) {
+      loadMoreBtn.style.display = visibleCount >= videoCards.length ? 'none' : '';
       loadMoreBtn.addEventListener('click', renderVideoBatch);
     }
   }
