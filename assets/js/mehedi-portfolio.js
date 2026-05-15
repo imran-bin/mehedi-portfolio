@@ -145,6 +145,35 @@
     if (slides.length > 1) start();
   }
 
+  var socialGrid = document.getElementById('socialGrid');
+  var socialLoadMoreBtn = document.getElementById('socialLoadMoreBtn');
+  if (socialGrid) {
+    var socialCards = Array.prototype.slice.call(socialGrid.querySelectorAll('.social-card'));
+    var socialInitial = parseInt(socialGrid.getAttribute('data-initial-show') || '3', 3);
+    var socialBatch = parseInt(socialGrid.getAttribute('data-batch-size') || '3', 3);
+    if (!Number.isFinite(socialInitial) || socialInitial < 1) socialInitial = 3;
+    if (!Number.isFinite(socialBatch) || socialBatch < 1) socialBatch = 3;
+    var socialVisible = Math.min(socialInitial, socialCards.length);
+
+    function renderSocialBatch() {
+      socialVisible = Math.min(socialVisible + socialBatch, socialCards.length);
+      socialCards.forEach(function (card, i) {
+        card.style.display = i < socialVisible ? '' : 'none';
+      });
+      if (socialLoadMoreBtn) {
+        socialLoadMoreBtn.style.display = socialVisible >= socialCards.length ? 'none' : '';
+      }
+    }
+
+    socialCards.forEach(function (card, i) {
+      card.style.display = i < socialVisible ? '' : 'none';
+    });
+    if (socialLoadMoreBtn) {
+      socialLoadMoreBtn.style.display = socialVisible >= socialCards.length ? 'none' : '';
+      socialLoadMoreBtn.addEventListener('click', renderSocialBatch);
+    }
+  }
+
   var videoGrid = document.getElementById('videoGrid');
   var loadMoreBtn = document.getElementById('videoLoadMoreBtn');
   if (videoGrid) {
