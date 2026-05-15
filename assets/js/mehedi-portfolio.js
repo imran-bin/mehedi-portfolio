@@ -69,8 +69,18 @@
       slides.forEach(function (slide, i) {
         slide.classList.toggle('active', i === current);
       });
-      if (subtitle) subtitle.textContent = slides[current].getAttribute('data-subtitle') || '';
-      if (description) description.textContent = slides[current].getAttribute('data-description') || '';
+      if (subtitle) {
+        subtitle.classList.remove('hero-text-fadeup');
+        subtitle.textContent = slides[current].getAttribute('data-subtitle') || '';
+        void subtitle.offsetWidth;
+        subtitle.classList.add('hero-text-fadeup');
+      }
+      if (description) {
+        description.classList.remove('hero-text-fadeup');
+        description.textContent = slides[current].getAttribute('data-description') || '';
+        void description.offsetWidth;
+        description.classList.add('hero-text-fadeup');
+      }
       if (dotsWrap) {
         dotsWrap.querySelectorAll('.hero-slider-dot').forEach(function (dot, i) {
           dot.classList.toggle('active', i === current);
