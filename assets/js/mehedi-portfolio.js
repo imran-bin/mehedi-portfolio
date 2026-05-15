@@ -55,6 +55,31 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(function (el) { obs.observe(el); });
 
+  var faqButtons = document.querySelectorAll('.faq-btn');
+  if (faqButtons.length) {
+    faqButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var answer = btn.nextElementSibling;
+        var willOpen = !btn.classList.contains('open');
+
+        faqButtons.forEach(function (otherBtn) {
+          otherBtn.classList.remove('open');
+          var otherAnswer = otherBtn.nextElementSibling;
+          if (otherAnswer && otherAnswer.classList.contains('faq-answer')) {
+            otherAnswer.classList.remove('open');
+          }
+        });
+
+        if (willOpen) {
+          btn.classList.add('open');
+          if (answer && answer.classList.contains('faq-answer')) {
+            answer.classList.add('open');
+          }
+        }
+      });
+    });
+  }
+
   var slider = document.getElementById('heroSlider');
   if (slider) {
     var slides = Array.prototype.slice.call(slider.querySelectorAll('.hero-slide'));
