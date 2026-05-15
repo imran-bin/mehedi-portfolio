@@ -149,10 +149,10 @@
   var loadMoreBtn = document.getElementById('videoLoadMoreBtn');
   if (videoGrid) {
     var videoCards = Array.prototype.slice.call(videoGrid.querySelectorAll('.video-card'));
-    var initialShow = parseInt(videoGrid.getAttribute('data-initial-show'), 3);
-    var batchSize = parseInt(videoGrid.getAttribute('data-batch-size'), 2);
-    if (!Number.isFinite(initialShow) || initialShow < 1) initialShow = 3;
-    if (!Number.isFinite(batchSize) || batchSize < 1) batchSize = 2;
+    var initialShow = parseInt(videoGrid.getAttribute('data-initial-show'), 10);
+    var batchSize = parseInt(videoGrid.getAttribute('data-batch-size'), 10);
+    if (!Number.isFinite(initialShow) || initialShow < 1) initialShow = 10;
+    if (!Number.isFinite(batchSize) || batchSize < 1) batchSize = 10;
     var visibleCount = Math.min(initialShow, videoCards.length);
 
     function renderVideoBatch() {
