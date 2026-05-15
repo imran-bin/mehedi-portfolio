@@ -31,6 +31,12 @@ img{max-width:100%;display:block}
 .hero-image{flex:1;display:flex;justify-content:center;position:relative}
 .image-container{position:relative;width:100%;max-width:450px;border-radius:30px;overflow:visible;border:8px solid #fff;box-shadow:var(--shadow-lg)}
 .image-container img{width:100%;height:auto;display:block;border-radius:22px !important}
+.hero-slider .hero-slide{display:none}
+.hero-slider .hero-slide.active{display:block;animation:heroFade 0.85s ease}
+.hero-slider-dots{position:absolute;left:0;right:0;bottom:-36px;display:flex;justify-content:center;gap:9px;z-index:4}
+.hero-slider-dot{width:11px;height:11px;border-radius:999px;border:1px solid rgba(0,106,78,0.35);background:#fff;cursor:pointer}
+.hero-slider-dot.active{background:var(--primary);border-color:var(--primary)}
+@keyframes heroFade{from{opacity:.3}to{opacity:1}}
 .floating-badge{position:absolute;background:#fff;padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;z-index:2;border:2px solid var(--glass-border)}
 .badge-top-right{top:20px;right:-10px}
 .badge-bottom-left{bottom:20px;left:-10px;padding:10px 20px}

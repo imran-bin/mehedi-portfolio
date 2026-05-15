@@ -55,6 +55,61 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(function (el) { obs.observe(el); });
 
+  var slider = document.getElementById('heroSlider');
+  if (slider) {
+    var slides = Array.prototype.slice.call(slider.querySelectorAll('.hero-slide'));
+    var dotsWrap = document.getElementById('heroSliderDots');
+    var subtitle = document.getElementById('heroSubtitle');
+    var description = document.getElementById('heroDescription');
+    var current = 0;
+    var timer = null;
+
+    function render(index) {
+      current = index;
+      slides.forEach(function (slide, i) {
+        slide.classList.toggle('active', i === current);
+      });
+      if (subtitle) subtitle.textContent = slides[current].getAttribute('data-subtitle') || '';
+      if (description) description.textContent = slides[current].getAttribute('data-description') || '';
+      if (dotsWrap) {
+        dotsWrap.querySelectorAll('.hero-slider-dot').forEach(function (dot, i) {
+          dot.classList.toggle('active', i === current);
+        });
+      }
+    }
+
+    function start() {
+      stop();
+      timer = setInterval(function () {
+        render((current + 1) % slides.length);
+      }, 4500);
+    }
+
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    if (dotsWrap && slides.length > 1) {
+      slides.forEach(function (_, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'hero-slider-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to hero slide ' + (i + 1));
+        dot.addEventListener('click', function () {
+          render(i);
+          start();
+        });
+        dotsWrap.appendChild(dot);
+      });
+    }
+
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', start);
+    render(0);
+    if (slides.length > 1) start();
+  }
+
   var overlay = document.getElementById('videoOverlay');
   var iframe = document.getElementById('videoIframe');
   var modalTitle = document.getElementById('videoModalTitle');
