@@ -203,6 +203,35 @@
     }
   }
 
+  var galleryGrid = document.getElementById('galleryGrid');
+  var galleryLoadMoreBtn = document.getElementById('galleryLoadMoreBtn');
+  if (galleryGrid) {
+    var galleryCards = Array.prototype.slice.call(galleryGrid.querySelectorAll('.gallery-item'));
+    var galleryInitial = parseInt(galleryGrid.getAttribute('data-initial-show') || '6', 10);
+    var galleryBatch = parseInt(galleryGrid.getAttribute('data-batch-size') || '6', 10);
+    if (!Number.isFinite(galleryInitial) || galleryInitial < 1) galleryInitial = 6;
+    if (!Number.isFinite(galleryBatch) || galleryBatch < 1) galleryBatch = 6;
+    var galleryVisible = Math.min(galleryInitial, galleryCards.length);
+
+    function renderGalleryBatch() {
+      galleryVisible = Math.min(galleryVisible + galleryBatch, galleryCards.length);
+      galleryCards.forEach(function (card, i) {
+        card.style.display = i < galleryVisible ? '' : 'none';
+      });
+      if (galleryLoadMoreBtn) {
+        galleryLoadMoreBtn.style.display = galleryVisible >= galleryCards.length ? 'none' : '';
+      }
+    }
+
+    galleryCards.forEach(function (card, i) {
+      card.style.display = i < galleryVisible ? '' : 'none';
+    });
+    if (galleryLoadMoreBtn) {
+      galleryLoadMoreBtn.style.display = galleryVisible >= galleryCards.length ? 'none' : '';
+      galleryLoadMoreBtn.addEventListener('click', renderGalleryBatch);
+    }
+  }
+
   var overlay = document.getElementById('videoOverlay');
   var iframe = document.getElementById('videoIframe');
   var iframeWrap = document.querySelector('.video-frame-wrap');
@@ -300,4 +329,68 @@
       }
     });
   }
+
+  var galleryOverlay = document.getElementById('galleryLightboxOverlay');
+  var galleryImage = document.getElementById('galleryLightboxImage');
+  var galleryClose = document.getElementById('galleryLightboxClose');
+
+  function ensureGalleryLightbox() {
+    if (galleryOverlay && galleryImage && galleryClose) return;
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML =
+      '<div id="galleryLightboxOverlay" class="gallery-lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Gallery image preview">' +
+      '<div class="gallery-lightbox-dialog">' +
+      '<button id="galleryLightboxClose" class="gallery-lightbox-close" type="button" aria-label="Close image">&times;</button>' +
+      '<img id="galleryLightboxImage" class="gallery-lightbox-image" src="" alt="Gallery Preview">' +
+      '</div></div>';
+    document.body.appendChild(wrapper.firstElementChild);
+    galleryOverlay = document.getElementById('galleryLightboxOverlay');
+    galleryImage = document.getElementById('galleryLightboxImage');
+    galleryClose = document.getElementById('galleryLightboxClose');
+  }
+
+  ensureGalleryLightbox();
+
+  function openGalleryLightbox(src) {
+    if (!galleryOverlay || !galleryImage || !src) return;
+    if (galleryOverlay.style.display === 'flex' && galleryImage.src === src) return;
+    galleryImage.src = src;
+    galleryOverlay.style.display = 'flex';
+    galleryOverlay.classList.add('open');
+    galleryOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeGalleryLightbox() {
+    if (!galleryOverlay || !galleryImage) return;
+    galleryOverlay.classList.remove('open');
+    galleryOverlay.setAttribute('aria-hidden', 'true');
+    setTimeout(function () {
+      if (galleryOverlay.getAttribute('aria-hidden') === 'true') {
+        galleryOverlay.style.display = 'none';
+        galleryImage.src = '';
+      }
+    }, 180);
+  }
+
+  var hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  document.querySelectorAll('.gallery-popup-trigger').forEach(function (item) {
+    item.addEventListener('click', function () {
+      var src = item.getAttribute('data-gallery-src') || '';
+      openGalleryLightbox(src);
+    });
+  });
+
+  if (galleryOverlay) {
+    galleryOverlay.addEventListener('click', function (e) {
+      if (e.target === galleryOverlay) closeGalleryLightbox();
+    });
+  }
+  if (galleryClose) {
+    galleryClose.addEventListener('click', closeGalleryLightbox);
+  }
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && galleryOverlay && galleryOverlay.style.display === 'flex') {
+      closeGalleryLightbox();
+    }
+  });
 })();
